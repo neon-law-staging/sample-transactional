@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+      The mount signal, named in the document as well as rendered by React.
+
+      `src/ready.tsx` renders the real element, and that is the one that proves
+      the bundle mounted. This meta tag exists so a check that can only read the
+      published `index.html` — a deployment smoke test, say — can still identify
+      which matter's portal it fetched.
+    -->
+    <meta name="navigator-ready-hook" content="widget-works-portal-ready" />
+    <title>Widget Works — Outside Counsel — Client Portal</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

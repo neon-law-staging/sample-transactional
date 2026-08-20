@@ -1,0 +1,46 @@
+Navigator Sample Project — Transactional — NOTICE
+
+Copyright (C) 2026 Neon Law Foundation
+
+SPDX-License-Identifier: AGPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of version 3 of the GNU Affero General Public License as published by
+the Free Software Foundation.  Version 3 exactly, and not "or any later
+version": the terms this repository publishes under are the terms in the file
+beside this one.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See LICENSE for more details.
+
+LICENSE holds that licence and nothing else — the Free Software Foundation's
+text, unaltered, so every tool that reads a licence file recognises which one
+this is.  It is the instrument.  What follows is the Neon Law Foundation's own
+account of how it applies to this work: nothing here narrows the grant, and
+nothing here is a second licence.
+
+WHAT THIS REPOSITORY IS.  A **project application**: a client portal that Neon
+Law Navigator publishes under one matter's Project code and streams from its own
+origin, behind that matter's session and participation gate.  It is a worked
+example, so that "attach a React application to a matter" has something a reader
+can clone and copy.  Navigator itself is a separate repository under the same
+licence.
+
+EVERYTHING HERE IS FIXTURE DATA.  *Widget Works — Outside Counsel* is a simulated matter.  No client,
+party, beneficiary, document, or figure in this repository describes a real
+person or a real engagement, and none ever will: no client data belongs in a
+public repository, and that boundary is what makes this one safe to publish.
+Nothing here is legal advice, and nothing here creates an attorney-client
+relationship with Shook Law PLLC.
+
+RUNNING IT OVER A NETWORK.  Section 13 is what makes this the Affero licence
+rather than the ordinary GPL, and it is the clause to read before deploying: if
+you modify this application and let users interact with it over a network, those
+users are owed the source of your modified version.
+
+TRADEMARKS.  The licence grants copyright, not trademark.  NEON LAW is a
+registered mark, U.S. Reg. No. 6,325,650, owned by Shook Law PLLC, the firm that
+operates Navigator and trades as Neon Law.  The Neon Law Foundation produces the
+software and holds its copyright.  The two are deliberately different
+organizations, and a fork carries the code without the marks.

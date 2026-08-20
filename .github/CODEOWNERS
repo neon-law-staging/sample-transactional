@@ -1,0 +1,10 @@
+# CODEOWNERS — @shicholas reviews everything.
+#
+# The handle must resolve on the host this repository lives on. This is
+# github.com, where the Foundation's repositories are published, and the account
+# is `@shicholas`. GitHub silently ignores an owner it cannot resolve: an
+# unresolvable owner does not fail the file, it just leaves every path unowned,
+# which is indistinguishable from having no CODEOWNERS at all.
+#
+# https://docs.github.com/articles/about-code-owners
+* @shicholas

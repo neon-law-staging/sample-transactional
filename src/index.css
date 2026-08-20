@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* Navigator serves this bundle under a CSP of `style-src 'self' 'unsafe-inline'`
+   and `font-src 'self' data:`. Tailwind is compiled into a hashed CSS asset by
+   `@tailwindcss/vite`, so nothing here reaches off-origin — which is what
+   `src/test/bundle.test.ts` asserts against the built output rather than
+   against this file. */
+
+:root {
+  color-scheme: light dark;
+}
