@@ -5,4 +5,4 @@
 # publishing one would put this matter's application on another matter's
 # portal. So this one line is the whole reason three sample bundles can be
 # staged side by side safely.
-name: widget-works
+name: sample-transactional
