@@ -85,9 +85,10 @@ describe('the built bundle', () => {
   })
 
   it('loads no stylesheet or script from a CDN', () => {
-    // Tailwind is compiled into the hashed CSS asset by `@tailwindcss/vite`. A
-    // `cdn.tailwindcss.com` tag would work on the dev server and be blocked in
-    // production, which is the worst possible place to find out.
+    // The design system is a package, compiled into the hashed CSS asset like
+    // any other import. A stylesheet or font pulled from a CDN instead would
+    // work on the dev server and be blocked in production, which is the worst
+    // possible place to find out.
     expect(builtDocument()).not.toMatch(/cdn\./)
     expect(bundledJs).not.toMatch(/https?:\/\/cdn\./)
   })

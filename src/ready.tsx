@@ -1,6 +1,8 @@
 // Copyright (C) 2026 Neon Law Foundation.
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { Badge } from '@neon-law-foundation/navigator-ux'
+
 /**
  * Navigator's mount signal.
  *
@@ -12,16 +14,18 @@
  * in a document, so the rule is: exactly one view renders at a time, and every
  * view spends this same kicker. Two copies in two files would eventually become
  * two different strings.
+ *
+ * The id sits on a wrapper rather than on the `Badge`, because `Badge` takes
+ * only its tone and its children: a themed component that accepted arbitrary
+ * DOM attributes would be a hole in the library's leaf rule, and the wrapper
+ * costs one element to respect it.
  */
 export const READY_ID = 'sample-transactional-portal-ready'
 
 export function Ready() {
   return (
-    <span
-      id={READY_ID}
-      className="inline-block rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200"
-    >
-      Client portal · live
+    <span id={READY_ID}>
+      <Badge tone="ready">Client portal · live</Badge>
     </span>
   )
 }

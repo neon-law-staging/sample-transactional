@@ -1,7 +1,6 @@
 // Copyright (C) 2026 Neon Law Foundation.
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 // vitest/config re-exports defineConfig with the `test` block typed.
 import { defineConfig, type Plugin } from 'vitest/config'
@@ -72,7 +71,7 @@ function licenseBanner(): Plugin {
 
 export default defineConfig({
   base: MOUNT,
-  plugins: [react(), tailwindcss(), licenseBanner()],
+  plugins: [react(), licenseBanner()],
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],

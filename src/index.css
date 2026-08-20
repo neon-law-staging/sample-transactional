@@ -1,11 +1,28 @@
-@import "tailwindcss";
+/* The portal's own stylesheet, imported after the design system's.
+ *
+ * Navigator serves this bundle under a CSP of `style-src 'self' 'unsafe-inline'`
+ * and `font-src 'self' data:`. Everything here is compiled into the same hashed
+ * CSS asset as the library's rules, and reaches nothing off-origin — which
+ * `src/test/bundle.test.ts` asserts against the built output rather than
+ * against this comment.
+ *
+ * This is not the brand layer. Navigator UX's layer 2 is a `:root:root` token
+ * override, and the sample deliberately wears the Foundation's teal, so it has
+ * none. What follows is a workaround for one upstream rule, and it should be
+ * deleted rather than built on.
+ */
 
-/* Navigator serves this bundle under a CSP of `style-src 'self' 'unsafe-inline'`
-   and `font-src 'self' data:`. Tailwind is compiled into a hashed CSS asset by
-   `@tailwindcss/vite`, so nothing here reaches off-origin — which is what
-   `src/test/bundle.test.ts` asserts against the built output rather than
-   against this file. */
-
-:root {
-  color-scheme: light dark;
+/* Restores the step number in `ActionList`.
+ *
+ * navigator-ux 0.7.0 paints the numbered chip `background: --nav-color-surface`
+ * with `color: --nav-color-on-primary` — white on white in light mode, so the
+ * number is there in the DOM, sized and positioned, and invisible. The pairing
+ * `--nav-color-on-primary` is named for is `--nav-color-primary`, which is what
+ * this sets; every other declaration on the chip is left to the library.
+ *
+ * Reported upstream. Delete this block when the fix lands, and delete the file
+ * with it if nothing else has moved in.
+ */
+.action-list li::before {
+  background: var(--nav-color-primary);
 }
