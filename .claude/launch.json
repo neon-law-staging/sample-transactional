@@ -1,0 +1,13 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portal-dev",
+      "runtimeExecutable": "node_modules/.bin/vite",
+      "runtimeArgs": ["--port", "5891", "--strictPort"],
+      "port": 5891,
+      "autoPort": false,
+      "url": "http://localhost:5891"
+    }
+  ]
+}

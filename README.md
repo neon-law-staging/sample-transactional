@@ -1,7 +1,8 @@
 # Navigator Sample Project — Transactional
 
 A **project application** for [Navigator](https://github.com/neon-law-foundation/navigator): the client portal for the
-fixture matter *Widget Works — Outside Counsel*, built with Vite, React 19, and Tailwind CSS.
+fixture matter *Widget Works — Outside Counsel*, built with Vite, React 19, and
+[Navigator UX](https://github.com/neon-law-foundation/navigator-ux).
 
 It exists so that "attach a React application to a matter" has a worked example a contributor can read, clone, and copy
 — and so Navigator's own local development loop has something real to build and serve. It is one of three, each a
@@ -27,6 +28,67 @@ The engagement, in two numbers and two turnarounds:
 
 The base fee is **$1,000 per month**. Every figure is invented and the schedule is illustrative rather than an offer — a
 real engagement's terms live in a signed retainer, not in a bundle.
+
+## The three views
+
+The portal serves three views from one document, switched by a `?tab=` query parameter rather than a path segment: this
+is a static bundle with no server-side router, and a deep path under the mount would need a rewrite the application
+cannot declare. A query parameter still gives a real URL — bookmarkable, refreshable, openable in a new tab — which is
+what client-side view state is not.
+
+| View | URL | What it is |
+| --- | --- | --- |
+| Overview | the mount itself | The engagement: what it costs, the two turnaround lanes, and what the client is asked to do next. |
+| Requests | `?tab=requests` | The intake queue — work arriving by email, triaged into a lane with a due date and a fee. |
+| Contract redline | `?tab=redline` | A Master Services Agreement under review, in Navigator notation, across three revisions. |
+
+### Requests
+
+Clients do not file tickets; they send mail. So intake is an inbox, and the interesting part is the triage beside it:
+`src/intake.ts` derives the lane, the due date, and the charge rather than storing them, because a stored due date is one
+that disagrees with the schedule the moment the schedule changes.
+
+**The lane is chosen by the address the client wrote to**, not by reading the subject line for the word "urgent". That
+is a commercial decision as much as a technical one: the expedited lane carries a per-contract fee, and a client should
+never be billed for it because a keyword matcher decided their mail sounded rushed. `redline@` buys one business day
+and the surcharge; `nexus@` is five business days, covered by the base fee; anything unrecognized falls to the free
+lane, because guessing the other way charges somebody for a typo.
+
+Due dates count business days and skip weekends, and mail that arrives on a weekend starts its clock on the next
+working day — a contract sent at noon on Saturday is not already a day late on Monday morning. **Public holidays are not
+modelled.** A real implementation resolves them against a jurisdiction's calendar, and that is not a thing a sample
+bundle should invent.
+
+The form sends a simulated email into the queue and shows the triage happening: pick an address, and a due date and a
+charge appear. Arrivals are stamped an hour after whatever is already last in the queue rather than from `Date.now()`,
+so the queue stays inside its named billing period and no test depends on the day it runs.
+
+### The redline
+
+`src/notation.ts` holds a sample MSA written in [Neon Law Navigator's markdown
+notation](https://github.com/neon-law-foundation/navigator/blob/main/docs/notation.md) — a YAML frontmatter block
+declaring the intake `questionnaire:` and the `workflow:` that renders, reviews, and signs the document, over a prose
+body carrying `{{question_code}}` placeholders resolved from the client's answers. It follows the shape of the real
+templates under `templates/neon_law/nexus/` in the Navigator repository, and `src/test/notation.test.ts` asserts that
+shape rather than trusting it: fenced frontmatter, the required keys, one linear questionnaire chain from `BEGIN` to
+`END`, and a `prompts:` entry for every `custom_*` question.
+
+Three revisions carry one negotiation — the Provider's form as received, our redline returned inside a business day,
+and their counter. The page steps **forwards and backwards** through them, and the editor diffs the revision on show
+against the one before it: struck-through text is what the previous revision said, underlined text is what this one
+says instead. Stepping backwards is the question a client actually asks — *what did they change since we sent it* —
+and it is a diff between two adjacent revisions.
+
+The editor is CodeMirror 6 with a `StreamLanguage` tokenizer for the notation format (`src/notation-language.ts`) and
+`@codemirror/merge`'s unified view for the redline. Both are themed entirely in `--nav-*` custom properties, so the
+editor re-colors with the rest of the portal when the reader's OS scheme flips. It is a real editor rather than a
+highlighted `<pre>` because the thing on show is source, and a reader expects to select a clause and scroll it with the
+keyboard. Edits are the reader's own scratch: this bundle has nowhere to send them, and the buffer is rebuilt from the
+fixture whenever the revision changes.
+
+It costs the bundle about 320 kB raw before compression, which is most of what this application weighs. That is the
+price of an editor, and it is paid on the overview view too — code-splitting the redline behind a dynamic import is the
+obvious next move if the overview's first paint starts to matter.
 
 ## Where it mounts
 
@@ -54,8 +116,9 @@ That has three consequences for this app:
 The serve CSP is `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;
 font-src 'self' data:; connect-src 'self'`. Nothing in this bundle is inline or off-origin, which is why it needs no
 exception — and `src/test/bundle.test.ts` asserts that against the built output rather than trusting it. In particular
-there is **no `cdn.tailwindcss.com`**: Tailwind is compiled into the hashed CSS asset by `@tailwindcss/vite`, because a
-CDN script tag works on the dev server and is blocked in production.
+there is **no font CDN**: Navigator UX vendors its woff2 files and Vite rewrites their URLs onto this bundle's own
+mount, because a remote asset works on the dev server, is blocked in production, and in an authenticated portal is a
+third party watching every page of a matter.
 
 ## The one contract Navigator depends on
 

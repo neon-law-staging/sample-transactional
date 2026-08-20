@@ -1,7 +1,7 @@
 {
   "name": "navigator-sample-project-transactional",
   "version": "0.1.0",
-  "description": "A Navigator project application: a client portal for the fixture matter Widget Works \u2014 Outside Counsel.",
+  "description": "A Navigator project application: a client portal for the fixture matter Widget Works — Outside Counsel.",
   "license": "AGPL-3.0-only",
   "private": true,
   "type": "module",
@@ -20,16 +20,21 @@
     "check": "pnpm lint && pnpm typecheck && pnpm build && pnpm test"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.3.3",
-    "clsx": "^2.1.1",
+    "@codemirror/commands": "^6.11.0",
+    "@codemirror/language": "^6.12.4",
+    "@codemirror/merge": "^6.12.2",
+    "@codemirror/state": "^6.7.1",
+    "@codemirror/view": "^6.43.9",
+    "@lezer/highlight": "^1.2.3",
+    "@neon-law-foundation/navigator-ux": "https://github.com/neon-law-foundation/navigator-ux/releases/download/v0.7.0/navigator-ux-v0.7.0.tgz",
+    "codemirror": "^6.0.2",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.3.3"
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.5",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.0.5",
