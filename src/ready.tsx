@@ -4,7 +4,7 @@
 /**
  * Navigator's mount signal.
  *
- * The element carrying `#widget-works-portal-ready` is what Navigator's browser
+ * The element carrying `#sample-transactional-portal-ready` is what Navigator's browser
  * walkthrough waits for, so it has to be rendered by React — a static marker
  * in `index.html` would report "ready" for a bundle that threw on mount.
  *
@@ -13,7 +13,7 @@
  * view spends this same kicker. Two copies in two files would eventually become
  * two different strings.
  */
-export const READY_ID = 'widget-works-portal-ready'
+export const READY_ID = 'sample-transactional-portal-ready'
 
 export function Ready() {
   return (

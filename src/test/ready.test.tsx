@@ -15,7 +15,7 @@ import { READY_ID } from '../ready'
  */
 describe('the mount signal', () => {
   it('is named for this matter', () => {
-    expect(READY_ID).toBe('widget-works-portal-ready')
+    expect(READY_ID).toBe('sample-transactional-portal-ready')
   })
 
   it('is rendered by the app rather than by the document', () => {
