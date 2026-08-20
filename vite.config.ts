@@ -18,7 +18,7 @@ import { defineConfig, type Plugin } from 'vitest/config'
  * The trailing slash is required: Navigator redirects the bare mount to the
  * slash form precisely because the base is joined directly onto it.
  */
-const MOUNT = '/app/projects/widget-works/portal/'
+const MOUNT = '/app/projects/sample-transactional/portal/'
 
 /**
  * The licence notice carried into the published bundle.

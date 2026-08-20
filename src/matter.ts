@@ -20,7 +20,7 @@
 
 export const MATTER = {
   /** The Project code. It is also the first segment of the bucket prefix. */
-  code: 'widget-works',
+  code: 'sample-transactional',
   caption: 'Widget Works — Outside Counsel',
   client: 'Widget Works, Inc.',
   practice: 'Employment agreements and contract review',

@@ -33,19 +33,19 @@ real engagement's terms live in a signed retainer, not in a bundle.
 Navigator serves this bundle at:
 
 ```text
-/app/projects/widget-works/portal/
+/app/projects/sample-transactional/portal/
 ```
 
-`widget-works` is the Project code; `portal` is a literal segment of Navigator's route, not an application name it looks up.
+`sample-transactional` is the Project code; `portal` is a literal segment of Navigator's route, not an application name it looks up.
 Navigator streams the bytes through its own origin behind the session cookie and the participation gate; it never
 redirects to a signed URL, because a signed URL is bearer-shareable and would not carry the session.
 
 That has three consequences for this app:
 
-1. **Vite `base` is baked at build time** and must be `/app/projects/widget-works/portal/`. A bundle built with the wrong base
+1. **Vite `base` is baked at build time** and must be `/app/projects/sample-transactional/portal/`. A bundle built with the wrong base
    404s on every asset. It is one named constant at the top of `vite.config.ts`.
 2. **Never hardcode a mount-absolute link.** Write links relative to the base, or derive them — `src/mount.ts` is the
-   whole of that job, and `portalPath()` is what every in-bundle link goes through. Hardcoded `/widget-works/...` strings are
+   whole of that job, and `portalPath()` is what every in-bundle link goes through. Hardcoded `/sample-transactional/...` strings are
    the single most common way one of these bundles breaks under its real mount, and they break silently, because the
    link only fails when somebody clicks it. Links to Navigator's *own* routes (`/app/projects`) stay absolute.
 3. **Same-origin is the whole mechanism.** Because the bundle is served from Navigator's origin, its calls to
@@ -62,7 +62,7 @@ CDN script tag works on the dev server and is blocked in production.
 The bundle must show that it actually mounted, through an element carrying:
 
 ```text
-id="widget-works-portal-ready"
+id="sample-transactional-portal-ready"
 ```
 
 Navigator's browser walkthrough waits for it. It is rendered by React (`src/ready.tsx`), never written into
@@ -74,7 +74,7 @@ signal exists to catch.
 `navigator.yml` declares it:
 
 ```yaml
-name: widget-works
+name: sample-transactional
 ```
 
 Navigator re-reads that file at boot rather than trusting the directory the bundle was staged in, and refuses a bundle
@@ -92,7 +92,7 @@ pnpm check                        # lint, typecheck, build, test — what CI run
 To build it the way Navigator does, from a Navigator checkout:
 
 ```bash
-cargo run -p cli -- dev sample-project --project widget-works
+cargo run -p cli -- dev sample-project --project sample-transactional
 ```
 
 That clones, builds, and stages this bundle for the next local `web` boot. Restart `web` afterwards so it reads the
