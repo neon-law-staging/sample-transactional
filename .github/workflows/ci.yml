@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A superseded run on the same branch has nothing left to tell us.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Fast and dependency-light, so a style problem reports in seconds rather than
+  # behind a full build.
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: pnpm
+
+      # `--frozen-lockfile` is the point of committing the lockfile: the library
+      # resolves from a release tarball rather than a registry range, and the
+      # lockfile's sha512 is what pins which bytes that URL is allowed to serve.
+      # An install that silently re-resolved would defeat it.
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm typecheck
+      - run: pnpm build
+
+      # After the build, never before. The bundle and license gates assert on
+      # real output — that nothing reaches off-origin, and that the AGPL notice
+      # survived into every emitted file — so running them first would pass by
+      # finding nothing to check rather than by being correct.
+      - run: pnpm test
+
+  # The single required status check. It runs nothing itself: the jobs above do
+  # the work and this one reports their combined result under one context name
+  # that never has to move.
+  #
+  # A required status check is matched by string, so renaming a working job
+  # renames its check run while the ruleset goes on waiting for the old
+  # spelling. Nothing turns red; pull requests simply sit forever on a check
+  # that will never arrive. The gate therefore terminates in a job spelled
+  # exactly `ci`, leaving the jobs behind it free to be renamed.
+  #
+  # It tests each dependency's result explicitly rather than relying on a bare
+  # `needs:`, because a skipped required check is not a red one: GitHub reports
+  # no result at all, so the gate would quietly stop blocking exactly when the
+  # jobs it guards had failed.
+  ci:
+    name: ci
+    needs: [lint, verify]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: report the gate result
+        env:
+          LINT_RESULT: ${{ needs.lint.result }}
+          VERIFY_RESULT: ${{ needs.verify.result }}
+        run: |
+          set -euo pipefail
+          echo "lint: ${LINT_RESULT}"
+          echo "verify: ${VERIFY_RESULT}"
+          if [ "${LINT_RESULT}" != "success" ] || [ "${VERIFY_RESULT}" != "success" ]; then
+              echo "::error::the merge gate is red"
+              exit 1
+          fi
