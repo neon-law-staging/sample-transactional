@@ -152,6 +152,13 @@ pnpm dev                          # the Vite dev server
 pnpm check                        # lint, typecheck, build, test — what CI runs
 ```
 
+**The dev server serves under the mount, not the bare root.** `base` is baked into `vite.config.ts`
+unconditionally rather than switched per mode, so the URL Vite prints is
+`http://localhost:5173/app/projects/sample-transactional/portal/`. Opening the bare root works — Vite
+302-redirects it to the base — but that redirect is the only thing making it work, and it exists on
+the dev server alone. A link or a fetch written as though the app were served from `/` is therefore
+broken in both places, and the dev server is where you can still notice.
+
 To build it the way Navigator does, from a Navigator checkout:
 
 ```bash
