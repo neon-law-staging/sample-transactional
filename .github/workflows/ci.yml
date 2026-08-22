@@ -14,6 +14,48 @@ permissions:
   contents: read
 
 jobs:
+  enable-automerge:
+    name: enable PR auto-merge
+    permissions:
+      contents: write
+      pull-requests: write
+    if: >
+      github.event_name == 'pull_request' &&
+      (github.event.action == 'opened' || github.event.action == 'ready_for_review' || github.event.action == 'synchronize') &&
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: request auto-merge
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          set -euo pipefail
+          GH_HOST="${GITHUB_SERVER_URL#https://}"
+          export GH_HOST
+          auto_merge_enabled="$(gh pr view "${PR_URL}" --json autoMergeRequest --jq '.autoMergeRequest != null')"
+          if [ "${auto_merge_enabled}" = "true" ]; then
+              echo "auto-merge already enabled; nothing to do."
+              exit 0
+          fi
+          pr_id="$(gh pr view "${PR_URL}" --json id --jq '.id')"
+          if ! result="$(gh api graphql -f pr="${pr_id}" -f query='
+              mutation($pr: ID!) {
+                enablePullRequestAutoMerge(input: { pullRequestId: $pr, mergeMethod: SQUASH }) {
+                  pullRequest { number }
+                }
+              }' 2>&1)"; then
+              if printf '%s' "${result}" | grep -q 'refusing to allow a GitHub App to create or update workflow'; then
+                  echo "PR edits workflow files; auto-merge must be armed manually for this PR."
+                  printf '%s\n' "${result}"
+                  exit 0
+              fi
+              printf '%s\n' "${result}" >&2
+              exit 1
+          fi
+          printf '%s\n' "${result}"
+
   # Fast and dependency-light, so a style problem reports in seconds rather than
   # behind a full build.
   lint:
