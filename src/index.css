@@ -14,7 +14,7 @@
 
 /* Restores the step number in `ActionList`.
  *
- * navigator-ux 0.7.0 paints the numbered chip `background: --nav-color-surface`
+ * navigator-ux 0.8.0 paints the numbered chip `background: --nav-color-surface`
  * with `color: --nav-color-on-primary` — white on white in light mode, so the
  * number is there in the DOM, sized and positioned, and invisible. The pairing
  * `--nav-color-on-primary` is named for is `--nav-color-primary`, which is what
