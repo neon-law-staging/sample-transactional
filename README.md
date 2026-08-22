@@ -1,8 +1,8 @@
 # Navigator Sample Project — Transactional
 
 A **project application** for [Navigator](https://github.com/neon-law-foundation/navigator): the client portal for the
-fixture matter *Widget Works — Outside Counsel*, built with Vite, React 19, and
-[Navigator UX](https://github.com/neon-law-foundation/navigator-ux).
+fixture matter *Widget Works — Outside Counsel*. [Navigator UX](https://github.com/neon-law-foundation/navigator-ux)
+supplies every component and every color; Vite and React 19 do the rest.
 
 It exists so that "attach a React application to a matter" has a worked example a contributor can read, clone, and copy
 — and so Navigator's own local development loop has something real to build and serve. It is one of three, each a
@@ -10,14 +10,14 @@ different shape of legal work: [litigation](https://github.com/neon-law-foundati
 [transactional](https://github.com/neon-law-foundation/navigator-sample-project-transactional), and
 [estate](https://github.com/neon-law-foundation/navigator-sample-project-estate).
 
-**Everything here is fixture data.** *Widget Works — Outside Counsel* is a simulated matter, and nobody named in this repository is a
-real person. No client data belongs in a public repository, ever.
+**Everything here is fixture data.** *Widget Works — Outside Counsel* is a simulated matter, and nobody named in this
+repository is a real person. No client data belongs in a public repository, ever.
 
 ## The matter
 
-This is the **transactional** sample: a company that is not in front of a court. Widget Works, Inc. buys a
-predictable volume of routine legal work at a predictable price, so the portal leads with the fee schedule where a
-litigation portal leads with the pleadings.
+This is the **transactional** sample: a company that is not in front of a court. Widget Works, Inc. buys a predictable
+volume of routine legal work at a predictable price, so the portal leads with the fee schedule where a litigation portal
+leads with the pleadings.
 
 The engagement, in two numbers and two turnarounds:
 
@@ -38,24 +38,24 @@ what client-side view state is not.
 
 | View | URL | What it is |
 | --- | --- | --- |
-| Overview | the mount itself | The engagement: what it costs, the two turnaround lanes, and what the client is asked to do next. |
-| Requests | `?tab=requests` | The intake queue — work arriving by email, triaged into a lane with a due date and a fee. |
-| Contract redline | `?tab=redline` | A Master Services Agreement under review, in Navigator notation, across three revisions. |
+| Overview | the mount itself | What the engagement costs, the two turnaround lanes, and what the client does next. |
+| Requests | `?tab=requests` | The intake queue — work arriving by email, triaged into a lane with a due date and fee. |
+| Contract redline | `?tab=redline` | A Master Services Agreement under review, in notation, across three revisions. |
 
 ### Requests
 
 Clients do not file tickets; they send mail. So intake is an inbox, and the interesting part is the triage beside it:
-`src/intake.ts` derives the lane, the due date, and the charge rather than storing them, because a stored due date is one
-that disagrees with the schedule the moment the schedule changes.
+`src/intake.ts` derives the lane, the due date, and the charge rather than storing them, because a stored due date is
+one that disagrees with the schedule the moment the schedule changes.
 
 **The lane is chosen by the address the client wrote to**, not by reading the subject line for the word "urgent". That
 is a commercial decision as much as a technical one: the expedited lane carries a per-contract fee, and a client should
-never be billed for it because a keyword matcher decided their mail sounded rushed. `redline@` buys one business day
-and the surcharge; `nexus@` is five business days, covered by the base fee; anything unrecognized falls to the free
-lane, because guessing the other way charges somebody for a typo.
+never be billed for it because a keyword matcher decided their mail sounded rushed. `redline@` buys one business day and
+the surcharge; `nexus@` is five business days, covered by the base fee; anything unrecognized falls to the free lane,
+because guessing the other way charges somebody for a typo.
 
-Due dates count business days and skip weekends, and mail that arrives on a weekend starts its clock on the next
-working day — a contract sent at noon on Saturday is not already a day late on Monday morning. **Public holidays are not
+Due dates count business days and skip weekends, and mail that arrives on a weekend starts its clock on the next working
+day — a contract sent at noon on Saturday is not already a day late on Monday morning. **Public holidays are not
 modelled.** A real implementation resolves them against a jurisdiction's calendar, and that is not a thing a sample
 bundle should invent.
 
@@ -65,19 +65,19 @@ so the queue stays inside its named billing period and no test depends on the da
 
 ### The redline
 
-`src/notation.ts` holds a sample MSA written in [Neon Law Navigator's markdown
-notation](https://github.com/neon-law-foundation/navigator/blob/main/docs/notation.md) — a YAML frontmatter block
-declaring the intake `questionnaire:` and the `workflow:` that renders, reviews, and signs the document, over a prose
-body carrying `{{question_code}}` placeholders resolved from the client's answers. It follows the shape of the real
-templates under `templates/neon_law/nexus/` in the Navigator repository, and `src/test/notation.test.ts` asserts that
-shape rather than trusting it: fenced frontmatter, the required keys, one linear questionnaire chain from `BEGIN` to
-`END`, and a `prompts:` entry for every `custom_*` question.
+Neon Law Navigator's [markdown notation](https://github.com/neon-law-foundation/navigator/blob/main/docs/notation.md) is
+the format `src/notation.ts` writes its sample MSA in — a YAML frontmatter block declaring the intake `questionnaire:`
+and the `workflow:` that renders, reviews, and signs the document, over a prose body carrying `{{question_code}}`
+placeholders resolved from the client's answers. It follows the shape of the real templates under
+`templates/neon_law/nexus/` in the Navigator repository, and `src/test/notation.test.ts` asserts that shape rather than
+trusting it: fenced frontmatter, the required keys, one linear questionnaire chain from `BEGIN` to `END`, and a
+`prompts:` entry for every `custom_*` question.
 
-Three revisions carry one negotiation — the Provider's form as received, our redline returned inside a business day,
-and their counter. The page steps **forwards and backwards** through them, and the editor diffs the revision on show
-against the one before it: struck-through text is what the previous revision said, underlined text is what this one
-says instead. Stepping backwards is the question a client actually asks — *what did they change since we sent it* —
-and it is a diff between two adjacent revisions.
+Three revisions carry one negotiation — the Provider's form as received, our redline returned inside a business day, and
+their counter. The page steps **forwards and backwards** through them, and the editor diffs the revision on show against
+the one before it: struck-through text is what the previous revision said, underlined text is what this one says
+instead. Stepping backwards is the question a client actually asks — *what did they change since we sent it* — and it is
+a diff between two adjacent revisions.
 
 The editor is CodeMirror 6 with a `StreamLanguage` tokenizer for the notation format (`src/notation-language.ts`) and
 `@codemirror/merge`'s unified view for the redline. Both are themed entirely in `--nav-*` custom properties, so the
@@ -98,18 +98,19 @@ Navigator serves this bundle at:
 /app/projects/sample-transactional/portal/
 ```
 
-`sample-transactional` is the Project code; `portal` is a literal segment of Navigator's route, not an application name it looks up.
-Navigator streams the bytes through its own origin behind the session cookie and the participation gate; it never
-redirects to a signed URL, because a signed URL is bearer-shareable and would not carry the session.
+`sample-transactional` is the Project code; `portal` is a literal segment of Navigator's route, not an application name
+it looks up. Navigator streams the bytes through its own origin behind the session cookie and the participation gate; it
+never redirects to a signed URL, because a signed URL is bearer-shareable and would not carry the session.
 
 That has three consequences for this app:
 
-1. **Vite `base` is baked at build time** and must be `/app/projects/sample-transactional/portal/`. A bundle built with the wrong base
-   404s on every asset. It is one named constant at the top of `vite.config.ts`.
+1. **Vite `base` is baked at build time** and must be `/app/projects/sample-transactional/portal/`. A bundle built with
+   the wrong base 404s on every asset. It is one named constant at the top of `vite.config.ts`.
 2. **Never hardcode a mount-absolute link.** Write links relative to the base, or derive them — `src/mount.ts` is the
-   whole of that job, and `portalPath()` is what every in-bundle link goes through. Hardcoded `/sample-transactional/...` strings are
-   the single most common way one of these bundles breaks under its real mount, and they break silently, because the
-   link only fails when somebody clicks it. Links to Navigator's *own* routes (`/app/projects`) stay absolute.
+   whole of that job, and `portalPath()` is what every in-bundle link goes through. Hardcoded
+   `/sample-transactional/...` strings are the single most common way one of these bundles breaks under its real mount,
+   and they break silently, because the link only fails when somebody clicks it. Links to Navigator's *own* routes
+   (`/app/projects`) stay absolute.
 3. **Same-origin is the whole mechanism.** Because the bundle is served from Navigator's origin, its calls to
    Navigator's read and command APIs are session-gated automatically. There is no backend in this repository.
 
@@ -128,9 +129,9 @@ The bundle must show that it actually mounted, through an element carrying:
 id="sample-transactional-portal-ready"
 ```
 
-Navigator's browser walkthrough waits for it. It is rendered by React (`src/ready.tsx`), never written into
-`index.html` — a static marker would report "ready" for a bundle that threw on mount, which is the exact failure the
-signal exists to catch.
+Navigator's browser walkthrough waits for it. It is rendered by React (`src/ready.tsx`), never written into `index.html`
+— a static marker would report "ready" for a bundle that threw on mount, which is the exact failure the signal exists to
+catch.
 
 ## Which Project this bundle belongs to
 
@@ -152,12 +153,12 @@ pnpm dev                          # the Vite dev server
 pnpm check                        # lint, typecheck, build, test — what CI runs
 ```
 
-**The dev server serves under the mount, not the bare root.** `base` is baked into `vite.config.ts`
-unconditionally rather than switched per mode, so the URL Vite prints is
-`http://localhost:5173/app/projects/sample-transactional/portal/`. Opening the bare root works — Vite
-302-redirects it to the base — but that redirect is the only thing making it work, and it exists on
-the dev server alone. A link or a fetch written as though the app were served from `/` is therefore
-broken in both places, and the dev server is where you can still notice.
+**The dev server serves under the mount, not the bare root.** `base` is baked into `vite.config.ts` unconditionally
+rather than switched per mode, so the URL Vite prints is
+`http://localhost:5173/app/projects/sample-transactional/portal/`. Opening the bare root works — Vite 302-redirects it
+to the base — but that redirect is the only thing making it work, and it exists on the dev server alone. A link or a
+fetch written as though the app were served from `/` is therefore broken in both places, and the dev server is where you
+can still notice.
 
 To build it the way Navigator does, from a Navigator checkout:
 
