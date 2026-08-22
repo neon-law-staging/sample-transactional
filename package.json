@@ -26,7 +26,7 @@
     "@codemirror/state": "^6.7.1",
     "@codemirror/view": "^6.43.9",
     "@lezer/highlight": "^1.2.3",
-    "@neon-law-foundation/navigator-ux": "https://github.com/neon-law-foundation/navigator-ux/releases/download/v0.7.0/navigator-ux-v0.7.0.tgz",
+    "@neon-law-foundation/navigator-ux": "https://github.com/neon-law-foundation/navigator-ux/releases/download/v0.8.0/navigator-ux-v0.8.0.tgz",
     "codemirror": "^6.0.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
