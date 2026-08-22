@@ -114,12 +114,16 @@ That has three consequences for this app:
 3. **Same-origin is the whole mechanism.** Because the bundle is served from Navigator's origin, its calls to
    Navigator's read and command APIs are session-gated automatically. There is no backend in this repository.
 
-The serve CSP is `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;
-font-src 'self' data:; connect-src 'self'`. Nothing in this bundle is inline or off-origin, which is why it needs no
-exception — and `src/test/bundle.test.ts` asserts that against the built output rather than trusting it. In particular
-there is **no font CDN**: Navigator UX vendors its woff2 files and Vite rewrites their URLs onto this bundle's own
-mount, because a remote asset works on the dev server, is blocked in production, and in an authenticated portal is a
-third party watching every page of a matter.
+The serve CSP is:
+
+```text
+default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'
+```
+
+Nothing in this bundle is inline or off-origin, which is why it needs no exception — and `src/test/bundle.test.ts`
+asserts that against the built output rather than trusting it. In particular there is **no font CDN**: Navigator UX
+vendors its woff2 files and Vite rewrites their URLs onto this bundle's own mount, because a remote asset works on the
+dev server, is blocked in production, and in an authenticated portal is a third party watching every page of a matter.
 
 ## The one contract Navigator depends on
 

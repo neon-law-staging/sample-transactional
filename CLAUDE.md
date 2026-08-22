@@ -66,6 +66,64 @@ pnpm check
 That is `lint`, `typecheck`, `build`, and `test` in order. `pnpm test` reads `dist/`, so run the build first or run
 `pnpm check`, which does.
 
+## Notation lint
+
+`pnpm check` covers the TypeScript. The Markdown and the YAML answer to the Neon Law Navigator rule set instead, and the
+only thing that reads them is the Navigator CLI:
+
+```bash
+brew install neon-law-foundation/navigator/navigator   # macOS, and tap-qualified on purpose
+pnpm validate                                          # navigator validate, over the whole tree
+```
+
+Install it tap-qualified. An unqualified `brew install navigator` resolves to a Homebrew cask for a trackpad utility of
+the same name, which installs cleanly and then has no `validate` subcommand. `brew upgrade` keeps it current, and
+`navigator --version` says which rule set you are holding this repository to.
+
+CI does not use Homebrew. The `notation` job in `.github/workflows/ci.yml` runs on `ubuntu-latest` and unpacks the Linux
+tarball from a pinned public Navigator release into `$HOME/.local/bin`: one static binary, no tap, no account, no sudo.
+The pin is deliberate, so that a rule added upstream arrives when somebody bumps that line rather than turning a green
+branch red overnight. `notation` is one of the three jobs the required `ci` check waits on, so a finding blocks the
+merge — and the pinned version is worth keeping in step with the formula above, since the two together are what "it
+passed on my machine" means here.
+
+`pnpm validate` is deliberately not part of `pnpm check`: `check` needs only what `pnpm install` brings, so a
+contributor who has not installed the CLI is not blocked by it. Run both before pushing.
+
+`validate` takes no file list, and there is no list to keep current. It walks the tree itself and finds every Markdown,
+event, and YAML file under it, so a document is covered the moment it exists rather than the moment somebody remembers
+to register it. Each Markdown file it also classifies as it reads: prose gets the structural rules (`M*`) and the
+line-width rules (`S*`), and a file whose frontmatter makes it a notation — a `code:`, a `questionnaire:`, a `workflow:`
+— additionally gets the notation rules (`N*`). Vendored trees such as `node_modules/` are skipped, but `.gitignore` is
+not consulted, so a generated file that sits in the tree is linted like any other.
+
+A finding prints as `path:line RULE: message`, and an error exits non-zero where a warning is only reported.
+
+`navigator validate --fix` applies in place the fixes that are safe by construction — whitespace, ATX heading spacing,
+blockquote spacing — and then re-validates. The rest are diagnostic only: the `N*` notation rules, duplicate headings
+(M024), trailing heading punctuation (M026). Those it names and leaves for a human, which is the right split; a notation
+state machine is not something a formatter should rewrite.
+
+Every document here is filled greedily to 120 columns, because that is what the width rules ask for: **S101** rejects a
+line over 120, and **S102** rejects a line that stopped short of 120 with a word still to come. Match that when you edit
+rather than rewrapping a paragraph to 80 or 100 columns.
+
+Four things about writing prose that passes, none of them obvious from the message the rule prints:
+
+- **Some spans cannot be broken across lines.** A link, because CommonMark forbids a line break inside a destination; an
+  inline code span, because a break leaves whitespace at its edge (M038); an emphasis span, because the rules are
+  line-scoped and a span crossing a line reads as unbalanced (M037). So a ~100-character link that lands at the start of
+  a line reports S102 permanently — reword the sentence until the link sits inside a line, or make it the first thing in
+  its paragraph.
+- **Reference-style links are not the way out of that.** A definition line carrying a bare URL reports M034.
+- **A literal too long to shorten belongs in a fenced block.** S101 does not reach inside a fence, so a CSP header or a
+  long command goes in one — with a language tag, which is what M040 wants.
+- **Italics inside a list item bulleted with an asterisk report M037.** The bullet's own asterisk is counted as an
+  inline marker. A dash bullet has no such problem, and M004 holds a file to whichever character its first bullet used.
+
+The whole Markdown surface here is four documents at the repository root, so a clean report is cheap to keep and worth
+keeping at zero.
+
 ## Merging
 
 A green gate arms GitHub auto-merge on its own: the `enable-automerge` job in `.github/workflows/ci.yml` squash-merges

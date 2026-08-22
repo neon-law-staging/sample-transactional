@@ -164,6 +164,42 @@ jobs:
       # finding nothing to check rather than by being correct.
       - run: pnpm test
 
+  # The gate over the Markdown and the YAML, which nothing in `pnpm check` reads.
+  #
+  # The CLI arrives as the Linux tarball from a public Navigator release: one static
+  # binary, no tap, no registry account, and nothing for an Ubuntu runner to build.
+  # It unpacks under `$HOME` rather than `/usr/local/bin` so the step needs no sudo.
+  #
+  # The version is pinned rather than floating on whatever released last, so a rule
+  # added upstream arrives when this line is bumped instead of turning a green branch
+  # red overnight. Bumping it is a normal pull request. Keep it in step with the
+  # formula a developer installs locally:
+  # `brew install neon-law-foundation/navigator/navigator`.
+  notation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      NAVIGATOR_VERSION: 26.8.22-hotfix.23
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: install the Navigator CLI
+        run: |
+          set -euo pipefail
+          mkdir -p "${HOME}/.local/bin"
+          release="https://github.com/neon-law-foundation/navigator/releases/download/${NAVIGATOR_VERSION}"
+          curl --fail --location --silent --show-error \
+              "${release}/navigator-${NAVIGATOR_VERSION}-linux.tar.gz" \
+              | tar -xz -C "${HOME}/.local/bin" navigator
+          "${HOME}/.local/bin/navigator" --version
+          echo "${HOME}/.local/bin" >> "${GITHUB_PATH}"
+
+      # `validate` walks the tree itself — every Markdown, event, and YAML file
+      # under the checkout — so there is no list here to fall out of date. It exits
+      # non-zero on an error and zero on a warning, which is the split this job
+      # wants: a warning is worth reading in the log, not worth blocking a merge.
+      - run: navigator validate
+
   # The single required status check. It runs nothing itself: the jobs above do
   # the work and this one reports their combined result under one context name
   # that never has to move.
@@ -180,7 +216,7 @@ jobs:
   # jobs it guards had failed.
   ci:
     name: ci
-    needs: [lint, verify]
+    needs: [lint, verify, notation]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -199,11 +235,14 @@ jobs:
         env:
           LINT_RESULT: ${{ needs.lint.result }}
           VERIFY_RESULT: ${{ needs.verify.result }}
+          NOTATION_RESULT: ${{ needs.notation.result }}
         run: |
           set -euo pipefail
           echo "lint: ${LINT_RESULT}"
           echo "verify: ${VERIFY_RESULT}"
-          if [ "${LINT_RESULT}" != "success" ] || [ "${VERIFY_RESULT}" != "success" ]; then
+          echo "notation: ${NOTATION_RESULT}"
+          if [ "${LINT_RESULT}" != "success" ] || [ "${VERIFY_RESULT}" != "success" ] \
+              || [ "${NOTATION_RESULT}" != "success" ]; then
               echo "::error::the merge gate is red"
               exit 1
           fi
