@@ -1,0 +1,24 @@
+# navigator.yaml — the one file in which this repository names itself.
+#
+# `host` is the Navigator deployment that serves this Project. It is the whole
+# of the publish destination: `.github/navigator.py` maps it to that
+# deployment's private applications bucket, so nothing else in this repository
+# names a bucket and no repository variable can point a portal somewhere else.
+#
+# `project` is the Project code. It is the mount Navigator serves the portal at,
+# `/app/projects/<project>/portal/`, and the prefix the bundle is uploaded
+# under, `<project>/portal/`. `vite.config.ts` builds against it and the gate
+# checks the built `index.html` against it.
+
+host: staging.neonlaw.com
+project: sample-transactional
+
+# Off-origin strings the built bundle may name, each with the reason it is not a
+# request. Keys are full URLs; `navigator.py` splits a map entry on the first
+# `: `, as YAML does, so the scheme stays part of the key.
+allowed_prefixes:
+  # The AGPL source pointer, inside the preserved `/*!` banner on every emitted
+  # chunk and stylesheet. The licence requires the notice be kept and the engine
+  # never evaluates a comment. Stripping it to satisfy the gate would be removing
+  # a licence notice, which is the one edit here that would actually be wrong.
+  https://github.com/neon-law-foundation/: AGPL source pointer in a comment banner
