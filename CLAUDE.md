@@ -15,7 +15,7 @@ checkout alone: a change justified by a file nobody else has is a change the nex
 
 ## What this is
 
-A **project application** for [Navigator](https://github.com/neon-law-foundation/navigator): a static client portal for
+A **project application** for [Navigator](https://github.com/neon-law-source-code/navigator): a static client portal for
 the fixture matter *Widget Works — Outside Counsel*, published as a bundle that Navigator serves under one mount.
 `README.md` is the orientation; read it before changing anything structural.
 
@@ -37,7 +37,7 @@ and names the command.
 
 ## Styling
 
-Every surface comes from [`@neon-law-foundation/navigator-ux`](https://github.com/neon-law-foundation/navigator-ux),
+Every surface comes from [`@neon-law-foundation/navigator-ux`](https://github.com/neon-law-source-code/navigator-ux),
 installed from a release tarball pinned by URL in `package.json`. There is no Tailwind and no CSS framework: components
 emit semantic class names and every color resolves through a `--nav-*` custom property.
 
@@ -72,7 +72,7 @@ That is `lint`, `typecheck`, `build`, and `test` in order. `pnpm test` reads `di
 only thing that reads them is the Navigator CLI:
 
 ```bash
-brew install neon-law-foundation/navigator/navigator   # macOS, and tap-qualified on purpose
+brew install neon-law-source-code/navigator/navigator   # macOS, and tap-qualified on purpose
 pnpm validate                                          # navigator validate, over the whole tree
 ```
 

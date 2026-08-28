@@ -1,14 +1,14 @@
 # Navigator Sample Project — Transactional
 
-A **project application** for [Navigator](https://github.com/neon-law-foundation/navigator): the client portal for the
-fixture matter *Widget Works — Outside Counsel*. [Navigator UX](https://github.com/neon-law-foundation/navigator-ux)
+A **project application** for [Navigator](https://github.com/neon-law-source-code/navigator): the client portal for the
+fixture matter *Widget Works — Outside Counsel*. [Navigator UX](https://github.com/neon-law-source-code/navigator-ux)
 supplies every component and every color; Vite and React 19 do the rest.
 
 It exists so that "attach a React application to a matter" has a worked example a contributor can read, clone, and copy
 — and so Navigator's own local development loop has something real to build and serve. It is one of three, each a
-different shape of legal work: [litigation](https://github.com/neon-law-foundation/navigator-sample-project-litigation),
-[transactional](https://github.com/neon-law-foundation/navigator-sample-project-transactional), and
-[estate](https://github.com/neon-law-foundation/navigator-sample-project-estate).
+different shape of legal work: [litigation](https://github.com/neon-law-staging/sample-litigation),
+[transactional](https://github.com/neon-law-staging/sample-transactional), and
+[estate](https://github.com/neon-law-staging/sample-estate).
 
 **Everything here is fixture data.** *Widget Works — Outside Counsel* is a simulated matter, and nobody named in this
 repository is a real person. No client data belongs in a public repository, ever.
@@ -65,7 +65,7 @@ so the queue stays inside its named billing period and no test depends on the da
 
 ### The redline
 
-Neon Law Navigator's [markdown notation](https://github.com/neon-law-foundation/navigator/blob/main/docs/notation.md) is
+Neon Law Navigator's [markdown notation](https://github.com/neon-law-source-code/navigator/blob/main/docs/notation.md) is
 the format `src/notation.ts` writes its sample MSA in — a YAML frontmatter block declaring the intake `questionnaire:`
 and the `workflow:` that renders, reviews, and signs the document, over a prose body carrying `{{question_code}}`
 placeholders resolved from the client's answers. It follows the shape of the real templates under
