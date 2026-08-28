@@ -139,10 +139,10 @@ catch.
 
 ## Which Project this bundle belongs to
 
-`navigator.yml` declares it:
+`navigator.yaml` declares it:
 
 ```yaml
-name: sample-transactional
+project: sample-transactional
 ```
 
 Navigator re-reads that file at boot rather than trusting the directory the bundle was staged in, and refuses a bundle
