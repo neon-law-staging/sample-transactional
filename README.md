@@ -65,10 +65,10 @@ so the queue stays inside its named billing period and no test depends on the da
 
 ### The redline
 
-Neon Law Navigator's [markdown notation](https://github.com/neon-law-source-code/navigator/blob/main/docs/notation.md) is
-the format `src/notation.ts` writes its sample MSA in — a YAML frontmatter block declaring the intake `questionnaire:`
-and the `workflow:` that renders, reviews, and signs the document, over a prose body carrying `{{question_code}}`
-placeholders resolved from the client's answers. It follows the shape of the real templates under
+Neon Law Navigator's [markdown notation](https://github.com/neon-law-source-code/navigator/blob/main/docs/notation.md)
+is the format `src/notation.ts` writes its sample MSA in — a YAML frontmatter block declaring the intake
+`questionnaire:` and the `workflow:` that renders, reviews, and signs the document, over a prose body carrying
+`{{question_code}}` placeholders resolved from the client's answers. It follows the shape of the real templates under
 `templates/neon_law/nexus/` in the Navigator repository, and `src/test/notation.test.ts` asserts that shape rather than
 trusting it: fenced frontmatter, the required keys, one linear questionnaire chain from `BEGIN` to `END`, and a
 `prompts:` entry for every `custom_*` question.
