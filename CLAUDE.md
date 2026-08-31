@@ -1,17 +1,7 @@
 # Working in this repository
 
-## Stay inside this repository
-
-Read, search, and edit only files inside this repository's working tree. Do not open, read, or search files elsewhere on
-the machine — not the home directory, not sibling checkouts, not other projects under the same parent directory, not
-system paths, and not another worktree of this repository.
-
-If something you need appears to live outside the tree, say so and ask, rather than going to look for it. The one
-exception is what the toolchain reaches for on its own: `node_modules/` inside this tree is fair to read when you need a
-dependency's types or its shipped stylesheet.
-
-This is a scope rule, not a security boundary. The point is that work on this sample stays reproducible from this
-checkout alone: a change justified by a file nobody else has is a change the next contributor cannot verify.
+The `stay-in-repo` skill under `.claude/skills/` — synced into this checkout by `navigator projects repository
+sync-skills` — is the scope rule to read before reaching outside this tree.
 
 ## What this is
 
