@@ -16,7 +16,7 @@ import {
   StatusStrip,
   TextField,
   TextareaField,
-} from '@neon-law-foundation/navigator-ux'
+} from '@neon-law-source-code/navigator-ux'
 import { useState, type FormEvent } from 'react'
 
 import { FEES } from './matter'

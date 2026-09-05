@@ -13,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@neon-law-foundation/navigator-ux'
+} from '@neon-law-source-code/navigator-ux'
 
 import { FEES, MATTER_FACTS, NEXT_STEPS, TURNAROUND } from './matter'
 import { money } from './format'
