@@ -175,6 +175,6 @@ newly staged output.
 
 ## Licence
 
-`AGPL-3.0-only` over the whole tree. See [`LICENSE`](LICENSE) for the grant and [`NOTICE`](NOTICE) for the Foundation's
-own statements, including the § 13 network clause and the trademark note. Contributions are closed; see
-[`CONTRIBUTING.md`](CONTRIBUTING.md).
+`AGPL-3.0-only` over the whole tree. See [`LICENSE`](LICENSE) for the grant and [`NOTICE`](.github/NOTICE) for the
+Foundation's own statements, including the § 13 network clause and the trademark note. Contributions are closed; see
+[`CONTRIBUTING.md`](.github/CONTRIBUTING.md).
