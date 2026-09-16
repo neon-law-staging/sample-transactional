@@ -1,7 +1,7 @@
 {
   "name": "sample-transactional",
   "version": "0.1.0",
-  "description": "A Navigator project application: a client portal for the fixture matter Widget Works — Outside Counsel.",
+  "description": "A Navigator project application: a client portal for the fixture matter Widget Works \u2014 Outside Counsel.",
   "license": "AGPL-3.0-only",
   "private": true,
   "type": "module",
@@ -16,7 +16,7 @@
     "lint": "oxlint",
     "validate": "navigator validate",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "pnpm build && vitest run",
     "test:watch": "vitest",
     "check": "pnpm lint && pnpm typecheck && pnpm build && pnpm test"
   },

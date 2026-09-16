@@ -45,8 +45,8 @@ what client-side view state is not.
 ### Requests
 
 Clients do not file tickets; they send mail. So intake is an inbox, and the interesting part is the triage beside it:
-`src/intake.ts` derives the lane, the due date, and the charge rather than storing them, because a stored due date is
-one that disagrees with the schedule the moment the schedule changes.
+`portal/src/intake.ts` derives the lane, the due date, and the charge rather than storing them, because a stored due
+date is one that disagrees with the schedule the moment the schedule changes.
 
 **The lane is chosen by the address the client wrote to**, not by reading the subject line for the word "urgent". That
 is a commercial decision as much as a technical one: the expedited lane carries a per-contract fee, and a client should
@@ -66,12 +66,12 @@ so the queue stays inside its named billing period and no test depends on the da
 ### The redline
 
 Neon Law Navigator's [markdown notation](https://github.com/neon-law-source-code/navigator/blob/main/docs/notation.md)
-is the format `src/notation.ts` writes its sample MSA in — a YAML frontmatter block declaring the intake
+is the format `portal/src/notation.ts` writes its sample MSA in — a YAML frontmatter block declaring the intake
 `questionnaire:` and the `workflow:` that renders, reviews, and signs the document, over a prose body carrying
 `{{question_code}}` placeholders resolved from the client's answers. It follows the shape of the real templates under
-`templates/neon_law/nexus/` in the Navigator repository, and `src/test/notation.test.ts` asserts that shape rather than
-trusting it: fenced frontmatter, the required keys, one linear questionnaire chain from `BEGIN` to `END`, and a
-`prompts:` entry for every `custom_*` question.
+`templates/neon_law/nexus/` in the Navigator repository, and `portal/src/test/notation.test.ts` asserts that shape
+rather than trusting it: fenced frontmatter, the required keys, one linear questionnaire chain from `BEGIN` to `END`,
+and a `prompts:` entry for every `custom_*` question.
 
 Three revisions carry one negotiation — the Provider's form as received, our redline returned inside a business day, and
 their counter. The page steps **forwards and backwards** through them, and the editor diffs the revision on show against
@@ -79,8 +79,8 @@ the one before it: struck-through text is what the previous revision said, under
 instead. Stepping backwards is the question a client actually asks — *what did they change since we sent it* — and it is
 a diff between two adjacent revisions.
 
-The editor is CodeMirror 6 with a `StreamLanguage` tokenizer for the notation format (`src/notation-language.ts`) and
-`@codemirror/merge`'s unified view for the redline. Both are themed entirely in `--nav-*` custom properties, so the
+The editor is CodeMirror 6 with a `StreamLanguage` tokenizer for the notation format (`portal/src/notation-language.ts`)
+and `@codemirror/merge`'s unified view for the redline. Both are themed entirely in `--nav-*` custom properties, so the
 editor re-colors with the rest of the portal when the reader's OS scheme flips. It is a real editor rather than a
 highlighted `<pre>` because the thing on show is source, and a reader expects to select a clause and scroll it with the
 keyboard. Edits are the reader's own scratch: this bundle has nowhere to send them, and the buffer is rebuilt from the
@@ -105,9 +105,9 @@ never redirects to a signed URL, because a signed URL is bearer-shareable and wo
 That has three consequences for this app:
 
 1. **Vite `base` is baked at build time** and must be `/app/projects/sample-transactional/portal/`. A bundle built with
-   the wrong base 404s on every asset. It is one named constant at the top of `vite.config.ts`.
-2. **Never hardcode a mount-absolute link.** Write links relative to the base, or derive them — `src/mount.ts` is the
-   whole of that job, and `portalPath()` is what every in-bundle link goes through. Hardcoded
+   the wrong base 404s on every asset. It is one named constant at the top of `portal/vite.config.ts`.
+2. **Never hardcode a mount-absolute link.** Write links relative to the base, or derive them — `portal/src/mount.ts` is
+   the whole of that job, and `portalPath()` is what every in-bundle link goes through. Hardcoded
    `/sample-transactional/...` strings are the single most common way one of these bundles breaks under its real mount,
    and they break silently, because the link only fails when somebody clicks it. Links to Navigator's *own* routes
    (`/app/projects`) stay absolute.
@@ -120,10 +120,11 @@ The serve CSP is:
 default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'
 ```
 
-Nothing in this bundle is inline or off-origin, which is why it needs no exception — and `src/test/bundle.test.ts`
-asserts that against the built output rather than trusting it. In particular there is **no font CDN**: Navigator UX
-vendors its woff2 files and Vite rewrites their URLs onto this bundle's own mount, because a remote asset works on the
-dev server, is blocked in production, and in an authenticated portal is a third party watching every page of a matter.
+Nothing in this bundle is inline or off-origin, which is why it needs no exception — and
+`portal/src/test/bundle.test.ts` asserts that against the built output rather than trusting it. In particular there is
+**no font CDN**: Navigator UX vendors its woff2 files and Vite rewrites their URLs onto this bundle's own mount, because
+a remote asset works on the dev server, is blocked in production, and in an authenticated portal is a third party
+watching every page of a matter.
 
 ## The one contract Navigator depends on
 
@@ -133,9 +134,9 @@ The bundle must show that it actually mounted, through an element carrying:
 id="sample-transactional-portal-ready"
 ```
 
-Navigator's browser walkthrough waits for it. It is rendered by React (`src/ready.tsx`), never written into `index.html`
-— a static marker would report "ready" for a bundle that threw on mount, which is the exact failure the signal exists to
-catch.
+Navigator's browser walkthrough waits for it. It is rendered by React (`portal/src/ready.tsx`), never written into
+`portal/index.html` — a static marker would report "ready" for a bundle that threw on mount, which is the exact failure
+the signal exists to catch.
 
 ## Which Project this bundle belongs to
 
@@ -152,13 +153,13 @@ wrong code would put this matter's application on another matter's portal.
 ## Developing
 
 ```bash
-pnpm install --frozen-lockfile
-pnpm dev                          # the Vite dev server
-pnpm check                        # lint, typecheck, build, test — what CI runs
+pnpm --dir portal install --frozen-lockfile
+pnpm --dir portal dev                          # the Vite dev server
+pnpm --dir portal check                        # lint, typecheck, build, test — what CI runs
 ```
 
-**The dev server serves under the mount, not the bare root.** `base` is baked into `vite.config.ts` unconditionally
-rather than switched per mode, so the URL Vite prints is
+**The dev server serves under the mount, not the bare root.** `base` is baked into `portal/vite.config.ts`
+unconditionally rather than switched per mode, so the URL Vite prints is
 `http://localhost:5173/app/projects/sample-transactional/portal/`. Opening the bare root works — Vite 302-redirects it
 to the base — but that redirect is the only thing making it work, and it exists on the dev server alone. A link or a
 fetch written as though the app were served from `/` is therefore broken in both places, and the dev server is where you

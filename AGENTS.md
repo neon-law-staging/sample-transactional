@@ -3,7 +3,7 @@
 This is one Project's repository. It holds two kinds of source and nothing else.
 
 - `templates/` — notation blueprints, one `templates/<code>.md` per notation.
-- `apps/<app>/` — React + Vite applications, each discovered from its direct `package.json`.
+- `apps/<app>/` — React + Vite applications, each discovered from its direct `portal/package.json`.
 
 Filename stems use the Project code (hyphens become `_`) then `__name`; `code:` matches.
 
@@ -54,33 +54,34 @@ nothing here is legal advice or an offer. Copy that states otherwise is a bug.
 
 ## The two things that break silently
 
-1. **The mount.** `vite.config.ts` bakes `/app/projects/sample-transactional/portal/` in as Vite's `base`, and every
-   asset URL is joined onto it. A bundle built with the wrong base 404s on every asset *after* it is published, where no
-   build log is being read. Links inside the bundle derive from `src/mount.ts` rather than hardcoding the path.
+1. **The mount.** `portal/vite.config.ts` bakes `/app/projects/sample-transactional/portal/` in as Vite's `base`, and
+   every asset URL is joined onto it. A bundle built with the wrong base 404s on every asset *after* it is published,
+   where no build log is being read. Links inside the bundle derive from `portal/src/mount.ts` rather than hardcoding
+   the path.
 
 2. **The ready hook.** Navigator's walkthrough waits for `#sample-transactional-portal-ready`, so it must be rendered by
-   React (`src/ready.tsx`) rather than sat in `index.html` — a static marker would report success for a bundle that
-   threw on mount.
+React (`portal/src/ready.tsx`) rather than sat in `portal/index.html` — a static marker would report success for a
+bundle that threw on mount.
 
-`src/test/bundle.test.ts` pins both against the built output. It does not self-skip when `dist/` is missing; it fails
-and names the command.
+`portal/src/test/bundle.test.ts` pins both against the built output. It does not self-skip when `portal/dist/` is
+missing; it fails and names the command.
 
 ## Styling
 
 Every surface comes from [`@neon-law-source-code/navigator-ux`](https://github.com/neon-law-source-code/navigator-ux),
-installed from a release tarball pinned by URL in `package.json`. There is no Tailwind and no CSS framework: components
-emit semantic class names and every color resolves through a `--nav-*` custom property.
+installed from a release tarball pinned by URL in `portal/package.json`. There is no Tailwind and no CSS framework:
+components emit semantic class names and every color resolves through a `--nav-*` custom property.
 
 - Reach for a library component before writing markup. Its `dist/components/*.d.ts` files are the API reference, and
   they carry the reasoning as doc comments.
 - Do not write literal colors, font stacks, or radii. Use the tokens.
-- `src/index.css` is not a brand layer — it holds one documented workaround for an upstream rule. Add to it only for the
-  same kind of reason, and say why in a comment.
+- `portal/src/index.css` is not a brand layer — it holds one documented workaround for an upstream rule. Add to it only
+  for the same kind of reason, and say why in a comment.
 
 ## Conventions
 
-- Fixture data lives in its own module (`src/matter.ts`, `src/notation.ts`); components take it as props and import no
-  application module. Keep that seam.
+- Fixture data lives in its own module (`portal/src/matter.ts`, `portal/src/notation.ts`); components take it as props
+  and import no application module. Keep that seam.
 - Every source file opens with the AGPL-3.0-only SPDX header.
 - Comments explain *why*, at the density the surrounding files already use. This repository is a worked example someone
   reads — a comment that restates the code is noise, and a load-bearing line with no explanation is a trap.
@@ -90,16 +91,17 @@ emit semantic class names and every color resolves through a `--nav-*` custom pr
 Run the full gate before calling anything done:
 
 ```bash
-pnpm check
+pnpm --dir portal check
 ```
 
-That is `lint`, `typecheck`, `build`, and `test` in order. `pnpm test` reads `dist/`, so run the build first or run
-`pnpm check`, which does.
+That is `lint`, `typecheck`, `build`, and `test` in order. `pnpm --dir portal test` reads `portal/dist/`, and builds it
+first itself, so it is safe to run alone. The shared gate runs `test` before `build`, which is why the build lives
+inside the test script rather than being left to the caller.
 
 ## Notation lint
 
-`pnpm check` covers the TypeScript. The Markdown and the YAML answer to the Neon Law Navigator rule set instead, and the
-only thing that reads them is the Navigator CLI:
+`pnpm --dir portal check` covers the TypeScript. The Markdown and the YAML answer to the Neon Law Navigator rule set
+instead, and the only thing that reads them is the Navigator CLI:
 
 ```bash
 brew install neon-law-source-code/navigator/navigator   # macOS, and tap-qualified on purpose
@@ -117,8 +119,8 @@ branch red overnight. `notation` is one of the three jobs the required `ci` chec
 merge — and the pinned version is worth keeping in step with the formula above, since the two together are what "it
 passed on my machine" means here.
 
-`pnpm validate` is deliberately not part of `pnpm check`: `check` needs only what `pnpm install` brings, so a
-contributor who has not installed the CLI is not blocked by it. Run both before pushing.
+`pnpm validate` is deliberately not part of `pnpm --dir portal check`: `check` needs only what `pnpm --dir portal
+install` brings, so a contributor who has not installed the CLI is not blocked by it. Run both before pushing.
 
 `validate` takes no file list, and there is no list to keep current. It walks the tree itself and finds every Markdown,
 event, and YAML file under it, so a document is covered the moment it exists rather than the moment somebody remembers
