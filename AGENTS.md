@@ -94,8 +94,9 @@ Run the full gate before calling anything done:
 pnpm --dir portal check
 ```
 
-That is `lint`, `typecheck`, `build`, and `test` in order. `pnpm --dir portal test` reads `portal/dist/`, so run the
-build first or run `pnpm --dir portal check`, which does.
+That is `lint`, `typecheck`, `build`, and `test` in order. `pnpm --dir portal test` reads `portal/dist/`, and builds it
+first itself, so it is safe to run alone. The shared gate runs `test` before `build`, which is why the build lives
+inside the test script rather than being left to the caller.
 
 ## Notation lint
 
