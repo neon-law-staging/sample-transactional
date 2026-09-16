@@ -1,7 +1,7 @@
 // Copyright (C) 2026 Neon Law Foundation.
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { CaseHead, LegalDisclaimer, LinkTabs, Shell, Stack } from '@neon-law-foundation/navigator-ux'
+import { CaseHead, LegalDisclaimer, LinkTabs, Shell, Stack } from '@neon-law-source-code/navigator-ux'
 
 import { MATTER } from './matter'
 import { Overview } from './Overview'

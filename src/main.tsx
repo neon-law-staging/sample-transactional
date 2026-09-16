@@ -17,7 +17,7 @@ import { createRoot } from 'react-dom/client'
  * wears the Foundation's teal, so there is no token to override. It carries a
  * workaround for one upstream rule, and says so.
  */
-import '@neon-law-foundation/navigator-ux/styles.css'
+import '@neon-law-source-code/navigator-ux/styles.css'
 import './index.css'
 
 import { App } from './App'

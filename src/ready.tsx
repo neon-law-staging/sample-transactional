@@ -1,7 +1,7 @@
 // Copyright (C) 2026 Neon Law Foundation.
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Badge } from '@neon-law-foundation/navigator-ux'
+import { Badge } from '@neon-law-source-code/navigator-ux'
 
 /**
  * Navigator's mount signal.

@@ -21,4 +21,4 @@ allowed_prefixes:
   # chunk and stylesheet. The licence requires the notice be kept and the engine
   # never evaluates a comment. Stripping it to satisfy the gate would be removing
   # a licence notice, which is the one edit here that would actually be wrong.
-  https://github.com/neon-law-foundation/: AGPL source pointer in a comment banner
+  https://github.com/neon-law-staging/: AGPL source pointer in a comment banner
