@@ -5,7 +5,7 @@ on:
 
 jobs:
   ci:
-    uses: neon-law-source-code/navigator/.github/workflows/project-gate.yml@26.9.15-rc.2
+    uses: neon-law-source-code/navigator/.github/workflows/project-gate.yml@26.9.16
     with:
       project: "sample-transactional"
       host: "staging.neonlaw.com"
