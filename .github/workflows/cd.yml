@@ -10,10 +10,13 @@ permissions:
   id-token: write
 
 # The reusable publisher mints its deployment token only on this main-only
-# caller. The PR caller above has no permissions block: a called workflow
-# cannot widen the token the caller granted it. `gate` needs the same token
-# to exercise project-gate.yml's live document verification, live Project
-# gate, and seed import, which only run on a push to `main`.
+# caller. Both callers grant `id-token: write`, because a called workflow
+# cannot widen the token the caller granted it and project-gate.yml requests
+# that scope in every job — a caller that withholds it fails the run at
+# startup rather than inside a step. What the main-only caller adds is not a
+# wider token but the live half: project-gate.yml's live document
+# verification, live Project gate, and seed import only run on a push to
+# `main`.
 
 jobs:
   gate:
