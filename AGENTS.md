@@ -40,7 +40,7 @@ Do not put a legal file, a client upload, an answer, a generated document, or a 
 When Navigator's CLI is missing or wrong, open a Linear issue on the Lawyers team rather than documenting a CLI
 workaround here.
 
-The `stay-in-repo` skill under `.claude/skills/` — synced into this checkout by `navigator site projects repository
+The `stay-in-repo` skill under `.claude/skills/` — synced into this checkout by `navigator project repository
 sync-skills` — is the scope rule to read before reaching outside this tree.
 
 ## What this is
@@ -105,36 +105,36 @@ instead, and the only thing that reads them is the Navigator CLI:
 
 ```bash
 brew install neon-law-source-code/navigator/navigator   # macOS, and tap-qualified on purpose
-pnpm validate                                          # navigator validate, over the whole tree
+pnpm validate                                          # navigator project gate, over the whole tree
 ```
 
 Install it tap-qualified. An unqualified `brew install navigator` resolves to a Homebrew cask for a trackpad utility of
-the same name, which installs cleanly and then has no `validate` subcommand. `brew upgrade` keeps it current, and
+the same name, which installs cleanly and then has no `project` subcommand. `brew upgrade` keeps it current, and
 `navigator --version` says which rule set you are holding this repository to.
 
-CI does not use Homebrew. The `notation` job in `.github/workflows/ci.yml` runs on `ubuntu-latest` and unpacks the Linux
+CI does not use Homebrew. The `verify` job in `.github/workflows/ci.yml` runs on `ubuntu-latest` and unpacks the Linux
 tarball from a pinned public Navigator release into `$HOME/.local/bin`: one static binary, no tap, no account, no sudo.
 The pin is deliberate, so that a rule added upstream arrives when somebody bumps that line rather than turning a green
-branch red overnight. `notation` is one of the three jobs the required `ci` check waits on, so a finding blocks the
-merge — and the pinned version is worth keeping in step with the formula above, since the two together are what "it
-passed on my machine" means here.
+branch red overnight. `verify` is one of the three jobs the required `ci` check waits on, so a finding blocks the merge
+— and the pinned version is worth keeping in step with the formula above, since the two together are what "it passed on
+my machine" means here.
 
 `pnpm validate` is deliberately not part of `pnpm --dir portal check`: `check` needs only what `pnpm --dir portal
 install` brings, so a contributor who has not installed the CLI is not blocked by it. Run both before pushing.
 
-`validate` takes no file list, and there is no list to keep current. It walks the tree itself and finds every Markdown,
-event, and YAML file under it, so a document is covered the moment it exists rather than the moment somebody remembers
-to register it. Each Markdown file it also classifies as it reads: prose gets the structural rules (`M*`) and the
-line-width rules (`S*`), and a file whose frontmatter makes it a notation — a `code:`, a `questionnaire:`, a `workflow:`
-— additionally gets the notation rules (`N*`). Vendored trees such as `node_modules/` are skipped, but `.gitignore` is
-not consulted, so a generated file that sits in the tree is linted like any other.
+`project gate` takes no file list, and there is no list to keep current. It walks the tree itself and finds every
+Markdown, event, and YAML file under it, so a document is covered the moment it exists rather than the moment somebody
+remembers to register it. Each Markdown file it also classifies as it reads: prose gets the structural rules (`M*`) and
+the line-width rules (`S*`), and a file whose frontmatter makes it a notation — a `code:`, a `questionnaire:`, a
+`workflow:` — additionally gets the notation rules (`N*`). Vendored trees such as `node_modules/` are skipped, but
+`.gitignore` is not consulted, so a generated file that sits in the tree is linted like any other.
 
 A finding prints as `path:line RULE: message`, and an error exits non-zero where a warning is only reported.
 
-`navigator validate --fix` applies in place the fixes that are safe by construction — whitespace, ATX heading spacing,
-blockquote spacing — and then re-validates. The rest are diagnostic only: the `N*` notation rules, duplicate headings
-(M024), trailing heading punctuation (M026). Those it names and leaves for a human, which is the right split; a notation
-state machine is not something a formatter should rewrite.
+`navigator project gate` applies in place the fixes that are safe by construction — whitespace, ATX heading spacing,
+blockquote spacing — and then re-checks; `--ci`, which is what CI runs, refuses to write and fails instead. The rest are
+diagnostic only: the `N*` notation rules, duplicate headings (M024), trailing heading punctuation (M026). Those it names
+and leaves for a human, which is the right split; a notation state machine is not something a formatter should rewrite.
 
 Every document here is filled greedily to 120 columns, because that is what the width rules ask for: **S101** rejects a
 line over 120, and **S102** rejects a line that stopped short of 120 with a word still to come. Match that when you edit
