@@ -40,7 +40,7 @@ Do not put a legal file, a client upload, an answer, a generated document, or a 
 When Navigator's CLI is missing or wrong, open a Linear issue on the Lawyers team rather than documenting a CLI
 workaround here.
 
-The `stay-in-repo` skill under `.claude/skills/` — synced into this checkout by `navigator project repository
+The `stay-in-repo` skill under `.agents/skills/` — synced into this checkout by `navigator project repository
 sync-skills` — is the scope rule to read before reaching outside this tree.
 
 ## What this is
