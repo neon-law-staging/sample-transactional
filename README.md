@@ -176,6 +176,16 @@ newly staged output.
 
 ## Licence
 
-`AGPL-3.0-only` over the whole tree. See [`LICENSE`](LICENSE) for the grant and [`NOTICE`](.github/NOTICE) for the
-Foundation's own statements, including the § 13 network clause and the trademark note. Contributions are closed; see
-[`CONTRIBUTING.md`](.github/CONTRIBUTING.md).
+Apache-2.0 over the whole tree — [`LICENSE`](LICENSE) is the Apache Software Foundation's text verbatim and
+unsummarised, and the only licence file here. You may use, modify, redistribute and deploy this application, including
+commercially, with no obligation to publish your changes. Keep the notices: retain the copyright line and the licence,
+and state any file you changed.
+
+The licence grants copyright and, under section 3, patent — it does not grant trademark. NEON LAW is a registered mark,
+U.S. Reg. No. 6,325,650, owned by Shook Law PLLC, which operates Navigator and trades as Neon Law. A fork carries the
+code without the marks.
+
+Contributions are closed — a capacity decision rather than a licensing one. Write to
+[contact@neonlaw.com](mailto:contact@neonlaw.com) with a bug, a fork you are running, or a question about the licence,
+and report security findings to [support@neonlaw.com](mailto:support@neonlaw.com). Anything submitted for inclusion is
+inbound = outbound, licensed Apache-2.0 on the same terms; you keep the copyright in what you write.

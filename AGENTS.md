@@ -82,7 +82,7 @@ components emit semantic class names and every color resolves through a `--nav-*
 
 - Fixture data lives in its own module (`portal/src/matter.ts`, `portal/src/notation.ts`); components take it as props
   and import no application module. Keep that seam.
-- Every source file opens with the AGPL-3.0-only SPDX header.
+- Every source file opens with the Apache-2.0 SPDX header.
 - Comments explain *why*, at the density the surrounding files already use. This repository is a worked example someone
   reads — a comment that restates the code is noise, and a load-bearing line with no explanation is a trap.
 
@@ -179,8 +179,8 @@ before the 26.9.15-rc.2 migration. An entry added later records its reason here 
 
 ### Off-origin strings the bundle may name
 
-**`https://github.com/neon-law-staging/`** — AGPL source pointer in a comment banner
+**`https://github.com/neon-law-staging/`** — Apache-2.0 source pointer in a comment banner
 
-The AGPL source pointer, inside the preserved `/*!` banner on every emitted chunk and stylesheet. The licence requires
-the notice be kept and the engine never evaluates a comment. Stripping it to satisfy the gate would be removing a
-licence notice, which is the one edit here that would actually be wrong.
+The Apache-2.0 source pointer, inside the preserved `/*!` banner on every emitted chunk and stylesheet. The licence
+requires the notice be kept and the engine never evaluates a comment. Stripping it to satisfy the gate would be removing
+a licence notice, which is the one edit here that would actually be wrong.

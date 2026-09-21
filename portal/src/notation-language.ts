@@ -1,5 +1,5 @@
 // Copyright (C) 2026 Neon Law Foundation.
-// SPDX-License-Identifier: AGPL-3.0-only
+// SPDX-License-Identifier: Apache-2.0
 
 import { HighlightStyle, StreamLanguage, syntaxHighlighting } from '@codemirror/language'
 import type { Extension } from '@codemirror/state'

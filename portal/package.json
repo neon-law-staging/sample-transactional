@@ -2,7 +2,7 @@
   "name": "sample-transactional",
   "version": "0.1.0",
   "description": "A Navigator project application: a client portal for the fixture matter Widget Works \u2014 Outside Counsel.",
-  "license": "AGPL-3.0-only",
+  "license": "Apache-2.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.17.0",

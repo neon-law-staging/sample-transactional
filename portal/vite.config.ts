@@ -1,5 +1,5 @@
 // Copyright (C) 2026 Neon Law Foundation.
-// SPDX-License-Identifier: AGPL-3.0-only
+// SPDX-License-Identifier: Apache-2.0
 
 import react from '@vitejs/plugin-react'
 // vitest/config re-exports defineConfig with the `test` block typed.
@@ -29,7 +29,7 @@ const MOUNT = '/app/projects/sample-transactional/portal/'
 const LICENSE_BANNER = `/*!
  * Widget Works — Outside Counsel — Client Portal.
  * Copyright (C) 2026 Neon Law Foundation.
- * SPDX-License-Identifier: AGPL-3.0-only
+ * SPDX-License-Identifier: Apache-2.0
  *
  * Source: https://github.com/neon-law-staging/sample-transactional
  */`
