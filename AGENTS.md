@@ -182,5 +182,5 @@ before the 26.9.15-rc.2 migration. An entry added later records its reason here 
 **`https://github.com/neon-law-staging/`** — Apache-2.0 source pointer in a comment banner
 
 The Apache-2.0 source pointer, inside the preserved `/*!` banner on every emitted chunk and stylesheet. The licence
-requires the notice be kept and the engine never evaluates a comment. Stripping it to satisfy the gate would be
-removing a licence notice, which is the one edit here that would actually be wrong.
+requires the notice be kept and the engine never evaluates a comment. Stripping it to satisfy the gate would be removing
+a licence notice, which is the one edit here that would actually be wrong.
