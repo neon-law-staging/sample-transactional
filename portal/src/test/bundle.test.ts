@@ -1,5 +1,5 @@
 // Copyright (C) 2026 Neon Law Foundation.
-// SPDX-License-Identifier: AGPL-3.0-only
+// SPDX-License-Identifier: Apache-2.0
 
 import { describe, expect, it } from 'vitest'
 
@@ -105,6 +105,6 @@ describe('the built bundle', () => {
   })
 
   it('declares the licence in the emitted JavaScript', () => {
-    expect(bundledJs, BUILD_FIRST).toContain('AGPL-3.0-only')
+    expect(bundledJs, BUILD_FIRST).toContain('Apache-2.0')
   })
 })
